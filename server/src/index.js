@@ -1,6 +1,8 @@
 const { GraphQLServer } = require('graphql-yoga');
 const { Prisma } = require('prisma-binding');
+const cookieParser = require('cookie-parser');
 const resolvers = require('./resolvers');
+const { sendCookieTokenMiddleware } = require('./utils');
 
 const db = new Prisma({
   typeDefs: 'src/generated/prisma.graphql',
@@ -14,4 +16,10 @@ const server = new GraphQLServer({
   context: req => ({ ...req, db })
 });
 
-server.start(() => console.log('Server is running on http://localhost:4000'));
+server.express.use(cookieParser());
+server.express.use(sendCookieTokenMiddleware);
+
+server.start(
+  { cors: { origin: 'http://localhost:3000', credentials: true }},
+  () => console.log('Server is running on http://localhost:4000')
+);

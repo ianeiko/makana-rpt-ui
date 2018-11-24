@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 import FeedData from '../containers/FeedData';
 import FeedSubscriptionData from '../containers/FeedSubscriptionData';
 import ListComments from './ListComments';
+import LoginContainer from '../containers/LoginContainer';
 import Notice from './Notice';
 
 const styles = theme => ({
@@ -19,6 +20,7 @@ const enhanced = compose(withStyles(styles));
 
 export default enhanced(({ classes }) => (
   <div className={classes.page}>
+    <LoginContainer />
     <FeedSubscriptionData>
       {props => <Notice {...props} />}
     </FeedSubscriptionData>

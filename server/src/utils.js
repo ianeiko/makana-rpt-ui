@@ -2,8 +2,11 @@ const jwt = require('jsonwebtoken');
 
 function getUserId(ctx, optional = false) {
   const Authorization = ctx.request.get('Authorization');
-  if (Authorization) {
-    const token = Authorization.replace('Bearer ', '');
+  const headerToken = Authorization && Authorization.replace('Bearer ', '');
+  const cookieToken = ctx.request.cookies.token;
+  const token = cookieToken || headerToken;
+
+  if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
     return userId;
   }
@@ -25,8 +28,21 @@ class AuthError extends Error {
   }
 }
 
+const sendCookieTokenMiddleware = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return next();
+  }
+  const { user } = jwt.verify(token, process.env.APP_SECRET);
+  if (user) {
+    req.user = user;
+  }
+  return next();
+};
+
 module.exports = {
   getUserId,
   getUserIdOptional,
-  AuthError
+  AuthError,
+  sendCookieTokenMiddleware,
 };
