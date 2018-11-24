@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 import FeedData from '../containers/FeedData';
 import FeedSubscriptionData from '../containers/FeedSubscriptionData';
 import ListComments from './ListComments';
+import GetUser from '../containers/GetUser';
 import LoginContainer from '../containers/LoginContainer';
 import Notice from './Notice';
 import CommentFormContainer from '../containers/CommentFormContainer';
@@ -21,7 +22,9 @@ const enhanced = compose(withStyles(styles));
 
 export default enhanced(({ classes }) => (
   <div className={classes.page}>
-    <LoginContainer />
+    <GetUser>
+      {props => <LoginContainer {...props} />}
+    </GetUser>
     <CommentFormContainer />
     <FeedSubscriptionData>
       {props => <Notice {...props} />}

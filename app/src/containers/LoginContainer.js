@@ -4,7 +4,7 @@ import { branch, compose, renderComponent, withHandlers, withState } from 'recom
 import LoginForm from '../components/LoginForm';
 import LoggedinView from '../components/LoggedinView';
 
-const checkUserState = noUserData => branch(
+const checkAuth = noUserData => branch(
   noUserData,
   renderComponent(LoginForm),
   renderComponent(LoggedinView),
@@ -31,22 +31,13 @@ const loginMutation = gql`
   }
 `;
 
-const query = gql`
-  query {
-    me {
-      name
-    }
-  }
-`;
-
 const enhanced = compose(
-  graphql(query),
   graphql(loginMutation),
   withState('user', 'setUser', null),
   withHandlers({
     loginMutation: loginMutationHandler,
   }),
-  checkUserState(props => !props.data.me && !props.user),
+  checkAuth(props => !(props.data && props.data.me) && !props.user),
 );
 
 export default enhanced();
