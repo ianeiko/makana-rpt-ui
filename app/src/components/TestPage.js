@@ -6,6 +6,7 @@ import FeedSubscriptionData from '../containers/FeedSubscriptionData';
 import ListComments from './ListComments';
 import LoginContainer from '../containers/LoginContainer';
 import Notice from './Notice';
+import CommentFormContainer from '../containers/CommentFormContainer';
 
 const styles = theme => ({
   page: {
@@ -21,10 +22,10 @@ const enhanced = compose(withStyles(styles));
 export default enhanced(({ classes }) => (
   <div className={classes.page}>
     <LoginContainer />
+    <CommentFormContainer />
     <FeedSubscriptionData>
       {props => <Notice {...props} />}
     </FeedSubscriptionData>
-
     <FeedData>{props => <ListComments {...props} />}</FeedData>
   </div>
 ));
