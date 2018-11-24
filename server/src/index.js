@@ -20,6 +20,6 @@ server.express.use(cookieParser());
 server.express.use(sendCookieTokenMiddleware);
 
 server.start(
-  { cors: { origin: 'http://localhost:3000', credentials: true }},
+  { cors: { origin: /^https?:\/\/(localhost:)(.*)/, credentials: true }},
   () => console.log('Server is running on http://localhost:4000')
 );
