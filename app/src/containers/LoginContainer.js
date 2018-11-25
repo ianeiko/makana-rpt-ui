@@ -1,23 +1,19 @@
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { branch, compose, renderComponent, withHandlers, withState } from 'recompose';
+import { branch, compose, renderComponent, withHandlers } from 'recompose';
 import LoginForm from '../components/LoginForm';
 import LoggedinView from '../components/LoggedinView';
 
-const checkAuth = noUserData => branch(
-  noUserData,
-  renderComponent(LoginForm),
+const checkAuth = isAuthenticated => branch(
+  isAuthenticated,
   renderComponent(LoggedinView),
+  renderComponent(LoginForm),
 );
 
-const loginMutationHandler = ({ mutate, setUser }) => ({ email, password }) => (
+const loginMutationHandler = ({ mutate }) => ({ email, password }) => (
   mutate({
-    variables: { email, password }
-  })
-  .then(({ data: { login: { user }}}) => {
-    if (user) {
-      setUser(user);
-    }
+    variables: { email, password, },
+    refetchQueries: ['me', 'feed'],
   })
 );
 
@@ -33,11 +29,10 @@ const loginMutation = gql`
 
 const enhanced = compose(
   graphql(loginMutation),
-  withState('user', 'setUser', null),
   withHandlers({
     loginMutation: loginMutationHandler,
   }),
-  checkAuth(props => !(props.data && props.data.me) && !props.user),
+  checkAuth(({ data }) => data && data.me),
 );
 
 export default enhanced();

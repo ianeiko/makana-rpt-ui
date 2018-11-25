@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { compose, withProps, toRenderProps } from 'recompose';
 
 const query = gql`
-  query {
+  query me {
     me {
       name
     }
@@ -12,9 +12,7 @@ const query = gql`
 
 const enhanced = compose(
   graphql(query),
-  withProps(({ data: { me }}) => ({
-    user: me,
-  }))
+  withProps(({ data: { me }}) => me)
 );
 
 export default toRenderProps(enhanced);

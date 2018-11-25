@@ -9,7 +9,7 @@ const checkAuth = isAuthenticated => branch(
 );
 
 const query = gql`
-  query {
+  query me {
     me {
       name
     }

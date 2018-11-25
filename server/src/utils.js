@@ -12,6 +12,9 @@ function getUserId(ctx, optional = false) {
   }
 
   if (!optional) {
+    // refetchQueries will not recover from error!
+    // use getUserIdOptional instead when possible
+    // https://github.com/apollographql/react-apollo/issues/2070
     throw new AuthError();
   }
 
