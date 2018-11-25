@@ -11,6 +11,9 @@ const styles = theme => ({
     float: 'right',
     marginTop: theme.spacing.unit
   },
+  formLoading: {
+    visibility: 'hidden'
+  },
   form: {
     maxWidth: 400,
     width: '80%',
@@ -58,6 +61,7 @@ const onChangePassword = ({ setPassword, setErrors }) => ({ target: { value }}) 
 
 const LoginForm = ({
   classes,
+  data,
   email,
   errors,
   handleLogin,
@@ -65,7 +69,7 @@ const LoginForm = ({
   onChangeEmail,
   onChangePassword,
 }) => (
-  <form className={classes.form} onSubmit={handleLogin}>
+  <form className={data.loading ? classes.formLoading : classes.form} onSubmit={handleLogin}>
     <Notice message={errors && errors[0] && errors[0].message} />
     <FormControl className={classes.formControl} fullWidth>
       <TextField
@@ -83,8 +87,9 @@ const LoginForm = ({
       />
     </FormControl>
     <Button
-    className={classes.button}
+      className={classes.button}
       color="primary"
+      disabled={!!errors}
       variant="contained"
       type="submit">
       Login
