@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { compose } from 'recompose';
 import FeedData from '../containers/FeedData';
 import FeedSubscriptionData from '../containers/FeedSubscriptionData';
+import CheckAuth from '../containers/CheckAuth';
 import ListComments from './ListComments';
 import GetUser from '../containers/GetUser';
 import LoginContainer from '../containers/LoginContainer';
@@ -25,7 +26,9 @@ export default enhanced(({ classes }) => (
     <GetUser>
       {props => <LoginContainer {...props} />}
     </GetUser>
-    <CommentFormContainer />
+    <CheckAuth>
+      <CommentFormContainer />
+    </CheckAuth>
     <FeedSubscriptionData>
       {props => <Notice {...props} />}
     </FeedSubscriptionData>

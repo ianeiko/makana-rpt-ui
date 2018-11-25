@@ -1,13 +1,7 @@
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { branch, compose, renderComponent, renderNothing, withHandlers } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import CommentForm from '../components/CommentForm';
-
-const checkUserState = userLoggedIn => branch(
-  userLoggedIn,
-  renderComponent(CommentForm),
-  renderNothing,
-);
 
 const commentMutationHandler = ({ mutate }) => ({ message }) => (
   mutate({
@@ -31,8 +25,6 @@ const enhanced = compose(
   withHandlers({
     commentMutation: commentMutationHandler,
   }),
-  // TODO: fix with checkAuth
-  checkUserState(() => true)
 );
 
 export default enhanced(CommentForm);
