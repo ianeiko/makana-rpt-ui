@@ -12,7 +12,7 @@ import CommentFormContainer from '../containers/CommentFormContainer';
 
 const styles = theme => ({
   page: {
-    margin: theme.spacing.unit,
+    marginBottom: theme.spacing.unit * 10,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'

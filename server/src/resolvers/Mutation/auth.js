@@ -34,6 +34,11 @@ const auth = {
     ctx.response.cookie('token', token, cookieOptions);
 
     return { user, token };
+  },
+
+  logout(parent, variables, ctx) {
+    ctx.response.clearCookie('token');
+    return true;
   }
 };
 
