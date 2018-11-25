@@ -1,14 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
-const getUserObject = (data, user) => {
-  if (!user) {
-    return data && data.me && data.me.name;
-  }
-  return user && user.name;
-};
-
-const LoggedinView = ({ data, user }) => (
-  <div>Hello, {getUserObject(data, user)}!</div>
+const LoggedinView = ({ data }) => (
+  <Fragment>
+    Hello, {data && data.me && data.me.name}!
+  </Fragment>
 );
 
 export default LoggedinView;

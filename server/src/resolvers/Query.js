@@ -1,4 +1,4 @@
-const { getUserId, getUserIdOptional, AuthError } = require('../utils');
+const { getUserIdOptional, AuthError } = require('../utils');
 
 const Query = {
   feed(parent, args, ctx, info) {
@@ -34,7 +34,7 @@ const Query = {
   },
 
   me(parent, args, ctx, info) {
-    const id = getUserId(ctx);
+    const id = getUserIdOptional(ctx);
     return ctx.db.query.user({ where: { id } }, info);
   }
 };
