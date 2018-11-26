@@ -1,8 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import FormControl from './FormControl';
 import Button from '@material-ui/core/Button';
 import { compose, withHandlers, withState } from 'recompose';
+import FormControl from './FormControl';
 import Notice from './Notice';
 import errorForField from '../utils/errorForField';
 import validateLogin from '../validators/validateLogin';
