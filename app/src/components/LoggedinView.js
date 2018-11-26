@@ -26,7 +26,6 @@ const LoggedinView = ({ classes, data, logoutMutation }) => (
       <Typography className={classes.message} variant="h6">
         Hello, {data && data.me && data.me.name}!
       </Typography>
-      <p></p>
       <Button className={classes.button} variant="outlined" onClick={logoutMutation}>
         Logout
       </Button>

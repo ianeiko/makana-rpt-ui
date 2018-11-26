@@ -2,7 +2,7 @@ import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'validator/lib/isEmpty';
 
 const validateLogin = ({ email, password }) => {
-  if (isEmpty(email)) {
+  if (isEmpty(email, { ignore_whitespace: true })) {
     return [{ message: 'Email cannot be blank', field: 'email' }];
   }
   if (!isEmail(email)) {

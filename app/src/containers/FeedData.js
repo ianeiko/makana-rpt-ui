@@ -28,8 +28,8 @@ const query = gql`
 `;
 
 const subscriptionQuery = gql`
-  subscription {
-    feedSubscription {
+  subscription($includePrivate: Boolean) {
+    feedSubscription(includePrivate: $includePrivate) {
       mutation
       node {
         id
@@ -44,6 +44,12 @@ const subscriptionQuery = gql`
   }
 `;
 
+const subscribeToMore = (user) => ({
+  document: subscriptionQuery,
+  updateQuery,
+  variables: { includePrivate: !!user },
+});
+
 const enhanced = compose(
   graphql(query),
   withProps(({ data: { loading, feed } }) => ({
@@ -52,11 +58,15 @@ const enhanced = compose(
   })),
   lifecycle({
     componentWillMount() {
-      this.props.data.subscribeToMore({
-        document: subscriptionQuery,
-        updateQuery,
-      });
-    }
+      this.unsubscribe = this.props.data.subscribeToMore(subscribeToMore(this.props.user));
+    },
+    componentWillReceiveProps(nextProps) {
+      const userChanged = this.props.user !== nextProps.user;
+      if (userChanged) {
+        this.unsubscribe();
+        this.unsubscribe = this.props.data.subscribeToMore(subscribeToMore(nextProps.user));
+      }
+    },
   }),
 );
 

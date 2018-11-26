@@ -3,17 +3,17 @@ import gql from 'graphql-tag';
 import { compose, withHandlers } from 'recompose';
 import CommentForm from '../components/CommentForm';
 
-const commentMutationHandler = ({ mutate }) => ({ message }) => (
+const commentMutationHandler = ({ mutate }) => ({ message, isPublic }) => (
   mutate({
-    variables: { message }
+    variables: { message, isPublic }
   })
 );
 
 const commentMutation = gql`
-  mutation($message: String!) {
+  mutation($message: String!, $isPublic: Boolean!) {
     createComment(
       message: $message
-      isPublic: true
+      isPublic: $isPublic
     ) {
       message
     }

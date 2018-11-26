@@ -1,15 +1,15 @@
 const Subscription = {
   feedSubscription: {
-    subscribe: (parent, args, ctx, info) => {
-      // TODO: handle authenticated subscriptions
-      return ctx.db.subscription.comment(
-        {
-          where: {
-            node: {
-              isPublic: true
-            }
+    subscribe: (parent, { includePrivate }, ctx, info) => {
+      const queryPublic = !includePrivate ? {
+        where: {
+          node: {
+            isPublic: true
           }
-        },
+        }
+      } : {};
+      return ctx.db.subscription.comment(
+        queryPublic,
         info
       );
     }
