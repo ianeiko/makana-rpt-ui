@@ -11,7 +11,7 @@ const styles = theme => ({
   }
 });
 
-const FormControl = ({ errors, classes, value, label, onChange, type, field }) => {
+const FormControl = ({ errors, classes, value, label, onChange, field, textFieldOptions }) => {
   const error = errorForField(errors, field);
   return (
     <MUIFormControl className={classes.formControl} fullWidth>
@@ -19,8 +19,8 @@ const FormControl = ({ errors, classes, value, label, onChange, type, field }) =
         error={!!error}
         label={error || label}
         onChange={onChange}
-        type={type || 'string'}
         value={value}
+        {...textFieldOptions}
       />
     </MUIFormControl>
   );

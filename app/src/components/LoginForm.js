@@ -76,8 +76,10 @@ const LoginForm = ({
       field="password"
       label="Password:"
       onChange={onChangePassword}
-      type="password"
       value={password}
+      textFieldOptions={{
+        type: 'password',
+      }}
     />
     <Button
       className={classes.button}
