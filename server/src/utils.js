@@ -31,21 +31,8 @@ class AuthError extends Error {
   }
 }
 
-const sendCookieTokenMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return next();
-  }
-  const { user } = jwt.verify(token, process.env.APP_SECRET);
-  if (user) {
-    req.user = user;
-  }
-  return next();
-};
-
 module.exports = {
   getUserId,
   getUserIdOptional,
   AuthError,
-  sendCookieTokenMiddleware,
 };
