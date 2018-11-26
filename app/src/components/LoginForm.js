@@ -1,10 +1,11 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
+import FormControl from './FormControl';
 import Button from '@material-ui/core/Button';
 import { compose, withHandlers, withState } from 'recompose';
 import Notice from './Notice';
+import errorForField from '../utils/errorForField';
+import validateLogin from '../validators/validateLogin';
 
 const styles = theme => ({
   button: {
@@ -25,23 +26,11 @@ const styles = theme => ({
   }
 });
 
-const validateInputs = ({ email, password }) => {
-  if (email === '') {
-    return [{ message: 'Email cannot be blank!' }];
-  }
-  if (password === '') {
-    return [{ message: 'Password cannot be blank!' }];
-  }
-  return null;
-};
-
 const handleLogin = ({ email, loginMutation, setErrors, password }) => async event => {
   event.preventDefault();
-  const errors = validateInputs({ email, password });
-  if (errors) {
-    return setErrors(errors);
-  }
-  setErrors(null);
+  const errors = validateLogin({ email, password });
+  setErrors(errors);
+  if (errors) { return; }
 
   const result = await loginMutation({ email, password });
   if (result.errors && result.errors.length) {
@@ -49,13 +38,17 @@ const handleLogin = ({ email, loginMutation, setErrors, password }) => async eve
   }
 };
 
-const onChangeEmail = ({ setEmail, setErrors }) => ({ target: { value }}) => {
-  setErrors(null);
+const onChangeEmail = ({ errors, setEmail, setErrors }) => ({ target: { value }}) => {
+  if (errorForField(errors, 'email') || errorForField(errors)) {
+    setErrors(null);
+  }
   setEmail(value);
 };
 
-const onChangePassword = ({ setPassword, setErrors }) => ({ target: { value }}) => {
-  setErrors(null);
+const onChangePassword = ({ errors, setPassword, setErrors }) => ({ target: { value }}) => {
+  if (errorForField(errors, 'password') || errorForField(errors)) {
+    setErrors(null);
+  }
   setPassword(value);
 };
 
@@ -65,27 +58,27 @@ const LoginForm = ({
   email,
   errors,
   handleLogin,
-  password,
   onChangeEmail,
   onChangePassword,
+  password,
 }) => (
   <form className={data.loading ? classes.formLoading : classes.form} onSubmit={handleLogin}>
-    <Notice message={errors && errors[0] && errors[0].message} />
-    <FormControl className={classes.formControl} fullWidth>
-      <TextField
-        label="Email:"
-        onChange={onChangeEmail}
-        value={email}
-      />
-    </FormControl>
-    <FormControl className={classes.formControl} fullWidth>
-      <TextField
-        label="Password:"
-        onChange={onChangePassword}
-        type="password"
-        value={password}
-      />
-    </FormControl>
+    <Notice message={errorForField(errors)} />
+    <FormControl
+      errors={errors}
+      field="email"
+      label="Email:"
+      onChange={onChangeEmail}
+      value={email}
+    />
+    <FormControl
+      errors={errors}
+      field="password"
+      label="Password:"
+      onChange={onChangePassword}
+      type="password"
+      value={password}
+    />
     <Button
       className={classes.button}
       color="primary"
