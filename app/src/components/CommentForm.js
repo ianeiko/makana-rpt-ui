@@ -1,6 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import { compose, withHandlers, withState } from 'recompose';
 import FormControl from './FormControl';
 import errorForField from '../utils/errorForField';
@@ -17,17 +19,17 @@ const styles = theme => ({
   form: {
     maxWidth: 400,
     width: '80%',
-    marginTop: theme.spacing.unit * 8,
+    marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
   }
 });
 
-const handleSubmit = ({ commentMutation, message, setErrors, setMessage }) => async event => {
+const handleSubmit = ({ commentMutation, message, isPublic, setErrors, setMessage }) => async event => {
   event.preventDefault();
   const errors = validateMessage({ message });
   setErrors(errors);
   if (errors) { return; }
-  commentMutation({ message })
+  commentMutation({ message, isPublic })
     .then(() => {
       setMessage('');
     });
@@ -46,11 +48,17 @@ const onChangeMessage = ({ errors, setErrors, setMessage }) => ({ target: { valu
   setMessage(value);
 };
 
+const onChangeIsPublic = ({ setIsPublic }) => (event, checked) => {
+  setIsPublic(checked);
+};
+
 const CommentForm = ({
   classes,
   errors,
   handleSubmit,
+  isPublic,
   message,
+  onChangeIsPublic,
   onChangeMessage,
   onKeyPress,
 }) => (
@@ -66,6 +74,17 @@ const CommentForm = ({
         onKeyPress,
       }}
     />
+    <FormControlLabel
+      control={
+        <Switch
+          checked={isPublic}
+          value={isPublic}
+          onChange={onChangeIsPublic}
+          color="primary"
+        />
+      }
+      label={isPublic ? 'Share with everyone?' : 'Only registered users'}
+    />
     <Button
       className={classes.button}
       color="primary"
@@ -79,6 +98,7 @@ const CommentForm = ({
 
 const enhanced = compose(
   withState('message', 'setMessage', ''),
+  withState('isPublic', 'setIsPublic', true),
   withState('errors', 'setErrors', null),
   withHandlers({
     handleSubmit,
@@ -86,6 +106,7 @@ const enhanced = compose(
   withHandlers({
     onKeyPress,
     onChangeMessage,
+    onChangeIsPublic,
   }),
   withStyles(styles)
 );

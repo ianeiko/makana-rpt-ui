@@ -32,6 +32,10 @@ export default enhanced(({ classes }) => (
     <FeedSubscriptionData>
       {props => <Notice {...props} />}
     </FeedSubscriptionData>
-    <FeedData>{props => <ListComments {...props} />}</FeedData>
+    <GetUser>
+      {({ data }) => (
+        <FeedData user={data && data.me}>{props => <ListComments {...props} />}</FeedData>
+      )}
+    </GetUser>
   </div>
 ));
