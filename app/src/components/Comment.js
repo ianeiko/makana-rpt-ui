@@ -30,6 +30,7 @@ const styles = theme => ({
     paddingTop: 0,
   },
   cardHeader: {
+    minHeight: 48,
     margin: 0,
     paddingTop: 0,
     paddingBottom: 0,
@@ -45,7 +46,12 @@ export default enhanced(({ author, children, classes, message, createdAt, user, 
       action={
         <DeleteButtonContainer author={author} commentId={commentId} user={user} />
       }
-      subheader={<TimeAgo date={createdAt} />}
+      subheader={
+        <Typography variant="caption" color="textSecondary">
+          {`Posted by ${author && author.name} `}
+          <TimeAgo date={createdAt} />
+        </Typography>
+      }
     />
     <CardContent className={classes.cardContent}>
       <Typography variant="h5" component="h2">
