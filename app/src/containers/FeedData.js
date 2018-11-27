@@ -9,7 +9,7 @@ const updateQuery = (prev, { subscriptionData: { data }}) => {
     return prev;
   }
 
-  const { node, mutation } = data.feedSubscription;
+  const { node, mutation, previousValues } = data.feedSubscription;
   if (mutation === 'CREATED') {
     if (node.parent && node.parent.id) {
       const resultFeed = prev.feed;
@@ -20,6 +20,14 @@ const updateQuery = (prev, { subscriptionData: { data }}) => {
     }
     return {
       feed: [node, ...prev.feed]
+    };
+  } else if (mutation === 'DELETED') {
+    const deletedNodeId = previousValues.id.match(/^StringIdGCValue\((.+)\)/);
+    if (!deletedNodeId && !deletedNodeId[1]) {
+      return prev;
+    }
+    return {
+      feed: prev.feed.filter(node => node.id !== deletedNodeId[1]),
     };
   }
 
