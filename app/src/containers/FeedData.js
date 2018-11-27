@@ -2,16 +2,38 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { compose, lifecycle, withProps, toRenderProps } from 'recompose';
 
+const findNodeIndex = (feed, id) => feed.findIndex(node => node.id === id);
+
 const updateQuery = (prev, { subscriptionData: { data }}) => {
   if (!data) {
     return prev;
   }
 
-  const { node, mutation } = data.feedSubscription;
+  const { node, mutation, previousValues } = data.feedSubscription;
   if (mutation === 'CREATED') {
+    if (node.parent && node.parent.id) {
+      const resultFeed = prev.feed;
+      const repliedNodeIndex = findNodeIndex(prev.feed, node.parent.id);
+      const repliedNode = resultFeed[repliedNodeIndex];
+      repliedNode.children = [...repliedNode.children, node];
+      return { feed: resultFeed };
+    }
     return {
       feed: [node, ...prev.feed]
     };
+  } else if (mutation === 'DELETED') {
+    const deletedNodeId = previousValues.id.match(/^StringIdGCValue\((.+)\)/);
+    if (!deletedNodeId && !deletedNodeId[1]) {
+      return prev;
+    }
+    return {
+      feed: prev.feed.filter(node => node.id !== deletedNodeId[1]),
+    };
+  } else if (mutation === 'UPDATED') {
+    const resultFeed = prev.feed;
+    const updatedNodeIndex = findNodeIndex(prev.feed, node.id);
+    resultFeed[updatedNodeIndex] = node;
+    return { feed: resultFeed };
   }
 
   return prev;
@@ -23,6 +45,23 @@ const query = gql`
       id
       message
       createdAt
+      isPublic
+      author {
+        id
+        name
+      }
+      children {
+        id
+        message
+        createdAt
+        author {
+          id
+          name
+        }
+        parent {
+          id
+        }
+      }
     }
   }
 `;
@@ -35,6 +74,23 @@ const subscriptionQuery = gql`
         id
         message
         createdAt
+        isPublic
+        author {
+          id
+          name
+        }
+        parent {
+          id
+        }
+        children {
+          id
+          message
+          createdAt
+          author {
+            id
+            name
+          }
+        }
       }
       previousValues {
         id

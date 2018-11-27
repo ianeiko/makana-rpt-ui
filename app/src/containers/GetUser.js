@@ -5,6 +5,7 @@ import { compose, withProps, toRenderProps } from 'recompose';
 const query = gql`
   query me {
     me {
+      id
       name
     }
   }

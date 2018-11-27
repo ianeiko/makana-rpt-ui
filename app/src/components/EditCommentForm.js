@@ -15,21 +15,19 @@ const styles = theme => ({
   },
   form: {
     maxWidth: 400,
-    width: '80%',
+    width: '100%',
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
   }
 });
 
-const handleSubmit = ({ commentMutation, message, isPublic, setErrors, setMessage }) => async event => {
+const handleSubmit = ({ editCommentMutation, commentId, message, isPublic, setErrors, setEditMode }) => async event => {
   event.preventDefault();
   const errors = validateMessage({ message });
   setErrors(errors);
   if (errors) { return; }
-  commentMutation({ message, isPublic })
-    .then(() => {
-      setMessage('');
-    });
+  editCommentMutation({ commentId, message, isPublic })
+    .then(() => setEditMode(false));
 };
 
 const onKeyPress = ({ handleSubmit }) => event => {
@@ -63,7 +61,7 @@ const CommentForm = ({
     <FormControl
       errors={errors}
       field="message"
-      label="How will you make our world a better place?"
+      label="edit:"
       onChange={onChangeMessage}
       value={message}
       textFieldOptions={{
@@ -88,14 +86,14 @@ const CommentForm = ({
       disabled={!!errors}
       variant="contained"
       type="submit">
-      Post
+      Save
     </Button>
   </form>
 );
 
 const enhanced = compose(
-  withState('message', 'setMessage', ''),
-  withState('isPublic', 'setIsPublic', true),
+  withState('message', 'setMessage', ({ message }) => message),
+  withState('isPublic', 'setIsPublic', ({ isPublic }) => isPublic),
   withState('errors', 'setErrors', null),
   withHandlers({
     handleSubmit,
