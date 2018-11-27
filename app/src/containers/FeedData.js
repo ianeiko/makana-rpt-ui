@@ -54,6 +54,10 @@ const query = gql`
         id
         message
         createdAt
+        author {
+          id
+          name
+        }
         parent {
           id
         }
@@ -82,6 +86,10 @@ const subscriptionQuery = gql`
           id
           message
           createdAt
+          author {
+            id
+            name
+          }
         }
       }
       previousValues {

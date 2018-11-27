@@ -16,13 +16,14 @@ const styles = theme => ({
   }
 });
 
-const LoggedinView = ({ classes, createdAt, message }) => (
+const LoggedinView = ({ author, classes, createdAt, message }) => (
   <div className={classes.reply}>
-    <Typography className={classes.timeStamp} variant="subtitle1" color="textSecondary" gutterBottom>
-      <TimeAgo date={createdAt} />
-    </Typography>
     <Typography variant="subtitle2">
       {message}
+    </Typography>
+    <Typography variant="caption" color="textSecondary">
+      <TimeAgo date={createdAt} />
+      {` - ${author && author.name}`}
     </Typography>
   </div>
 );
