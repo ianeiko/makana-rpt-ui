@@ -40,6 +40,10 @@ const query = gql`
       id
       message
       createdAt
+      author {
+        id
+        name
+      }
       children {
         id
         message
@@ -60,6 +64,10 @@ const subscriptionQuery = gql`
         id
         message
         createdAt
+        author {
+          id
+          name
+        }
         parent {
           id
         }

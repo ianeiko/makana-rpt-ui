@@ -38,11 +38,13 @@ const styles = theme => ({
 
 const enhanced = compose(withStyles(styles));
 
-export default enhanced(({ children, classes, message, createdAt, user, commentId }) => (
+export default enhanced(({ author, children, classes, message, createdAt, user, commentId }) => (
   <Card className={classes.card}>
     <CardHeader
       className={classes.cardHeader}
-      action={<DeleteButtonContainer commentId={commentId} />}
+      action={
+        <DeleteButtonContainer author={author} commentId={commentId} user={user} />
+      }
       subheader={<TimeAgo date={createdAt} />}
     />
     <CardContent className={classes.cardContent}>

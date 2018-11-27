@@ -11,6 +11,7 @@ const checkAuth = isAuthenticated => branch(
 const query = gql`
   query me {
     me {
+      id
       name
     }
   }
