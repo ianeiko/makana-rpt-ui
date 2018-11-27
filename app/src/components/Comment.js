@@ -1,11 +1,13 @@
-import React from 'react';
-import { compose } from 'recompose';
+import React, { Fragment } from 'react';
+import { compose, withHandlers, withState } from 'recompose';
 import TimeAgo from 'react-timeago';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 import Typography from '@material-ui/core/Typography';
 import CommentReplyView from './CommentReplyView';
 import DeleteButtonContainer from '../containers/DeleteButtonContainer';
@@ -35,8 +37,19 @@ const styles = theme => ({
     margin: 0,
     paddingTop: 0,
     paddingBottom: 0,
+  },
+  actionButton: {
+    marginTop: theme.spacing.unit,
+    marginLeft: 0,
+    marginRight: 0,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
   }
 });
+
+const onChangeEditMode = ({ isEditMode, setEditMode }) => () => {
+  setEditMode(!isEditMode);
+};
 
 const Comment = ({
   author,
@@ -44,15 +57,23 @@ const Comment = ({
   classes,
   commentId,
   createdAt,
+  isEditMode,
   isPublic,
   message,
+  onChangeEditMode,
+  setEditMode,
   user,
  }) => (
   <Card className={classes.card}>
     <CardHeader
       className={classes.cardHeader}
       action={
-        <DeleteButtonContainer {...{ author, commentId, user }} />
+        <Fragment>
+          <IconButton className={classes.actionButton} onClick={onChangeEditMode} title="Edit">
+            <EditIcon />
+          </IconButton>
+          <DeleteButtonContainer {...{ author, commentId, user }} />
+        </Fragment>
       }
       subheader={
         <Typography variant="caption" color="textSecondary">
@@ -62,9 +83,11 @@ const Comment = ({
       }
     />
     <CardContent className={classes.cardContent}>
-      <Typography variant="h5" component="h2">
-        <EditCommentContainer {...{ commentId, isPublic, message }} />
-      </Typography>
+      {!isEditMode ? (
+        <Typography variant="h5" component="h2">
+          {message}
+        </Typography>
+      ) : <EditCommentContainer {...{ commentId, isPublic, setEditMode, message }} />}
       {children && children.map((reply, index) => (
         <CommentReplyView key={`${commentId}-reply-${index}`} {...reply} />
       ))}
@@ -75,6 +98,12 @@ const Comment = ({
   </Card>
 );
 
-const enhanced = compose(withStyles(styles));
+const enhanced = compose(
+  withState('isEditMode', 'setEditMode', false),
+  withHandlers({
+    onChangeEditMode,
+  }),
+  withStyles(styles)
+);
 
 export default enhanced(Comment);

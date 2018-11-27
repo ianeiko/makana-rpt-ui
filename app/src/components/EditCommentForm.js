@@ -21,12 +21,13 @@ const styles = theme => ({
   }
 });
 
-const handleSubmit = ({ editCommentMutation, commentId, message, isPublic, setErrors }) => async event => {
+const handleSubmit = ({ editCommentMutation, commentId, message, isPublic, setErrors, setEditMode }) => async event => {
   event.preventDefault();
   const errors = validateMessage({ message });
   setErrors(errors);
   if (errors) { return; }
-  editCommentMutation({ commentId, message, isPublic });
+  editCommentMutation({ commentId, message, isPublic })
+    .then(() => setEditMode(false));
 };
 
 const onKeyPress = ({ handleSubmit }) => event => {

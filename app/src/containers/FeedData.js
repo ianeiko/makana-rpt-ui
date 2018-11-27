@@ -29,6 +29,11 @@ const updateQuery = (prev, { subscriptionData: { data }}) => {
     return {
       feed: prev.feed.filter(node => node.id !== deletedNodeId[1]),
     };
+  } else if (mutation === 'UPDATED') {
+    const resultFeed = prev.feed;
+    const updatedNodeIndex = findNodeIndex(prev.feed, node.id);
+    resultFeed[updatedNodeIndex] = node;
+    return { feed: resultFeed };
   }
 
   return prev;

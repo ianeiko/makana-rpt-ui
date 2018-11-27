@@ -6,7 +6,11 @@ import { compose, withHandlers } from 'recompose';
 
 const styles = theme => ({
   button: {
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing.unit,
+    marginLeft: 0,
+    marginRight: 0,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
   },
 });
 
@@ -16,7 +20,7 @@ const handleDelete = ({ deleteCommentMutation, commentId }) => () => {
 
 
 const DeleteButton = ({ classes, handleDelete }) => (
-  <IconButton className={classes.button} onClick={handleDelete}>
+  <IconButton className={classes.button} onClick={handleDelete} title="Delete">
     <DeleteIcon />
   </IconButton>
 );
