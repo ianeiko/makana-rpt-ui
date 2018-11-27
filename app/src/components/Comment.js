@@ -83,11 +83,7 @@ const Comment = ({
       }
     />
     <CardContent className={classes.cardContent}>
-      {!isEditMode ? (
-        <Typography variant="h5" component="h2">
-          {message}
-        </Typography>
-      ) : <EditCommentContainer {...{ commentId, isPublic, setEditMode, message }} />}
+      <EditCommentContainer {...{ commentId, isPublic, isEditMode, setEditMode, message }} />
       {children && children.map((reply, index) => (
         <CommentReplyView key={`${commentId}-reply-${index}`} {...reply} />
       ))}
