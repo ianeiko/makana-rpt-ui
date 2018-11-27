@@ -40,6 +40,7 @@ const query = gql`
       id
       message
       createdAt
+      isPublic
       author {
         id
         name
@@ -64,6 +65,7 @@ const subscriptionQuery = gql`
         id
         message
         createdAt
+        isPublic
         author {
           id
           name

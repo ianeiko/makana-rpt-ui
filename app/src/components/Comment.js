@@ -9,6 +9,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import CommentReplyView from './CommentReplyView';
 import DeleteButtonContainer from '../containers/DeleteButtonContainer';
+import EditCommentContainer from '../containers/EditCommentContainer';
 import ReplyFormContainer from '../containers/ReplyFormContainer';
 
 const styles = theme => ({
@@ -37,14 +38,21 @@ const styles = theme => ({
   }
 });
 
-const enhanced = compose(withStyles(styles));
-
-export default enhanced(({ author, children, classes, message, createdAt, user, commentId }) => (
+const Comment = ({
+  author,
+  children,
+  classes,
+  commentId,
+  createdAt,
+  isPublic,
+  message,
+  user,
+ }) => (
   <Card className={classes.card}>
     <CardHeader
       className={classes.cardHeader}
       action={
-        <DeleteButtonContainer author={author} commentId={commentId} user={user} />
+        <DeleteButtonContainer {...{ author, commentId, user }} />
       }
       subheader={
         <Typography variant="caption" color="textSecondary">
@@ -55,7 +63,7 @@ export default enhanced(({ author, children, classes, message, createdAt, user, 
     />
     <CardContent className={classes.cardContent}>
       <Typography variant="h5" component="h2">
-        {message}
+        <EditCommentContainer {...{ commentId, isPublic, message }} />
       </Typography>
       {children && children.map((reply, index) => (
         <CommentReplyView key={`${commentId}-reply-${index}`} {...reply} />
@@ -65,4 +73,8 @@ export default enhanced(({ author, children, classes, message, createdAt, user, 
       <ReplyFormContainer parentCommentId={commentId} user={user} />
     </CardActions>
   </Card>
-));
+);
+
+const enhanced = compose(withStyles(styles));
+
+export default enhanced(Comment);
