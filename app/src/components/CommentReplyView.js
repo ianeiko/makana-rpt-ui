@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TimeAgo from 'react-timeago';
 import Typography from '@material-ui/core/Typography';
 import { compose } from 'recompose';
+import DeleteButtonContainer from '../containers/DeleteButtonContainer';
 
 const styles = theme => ({
   timeStamp: {
@@ -16,7 +17,8 @@ const styles = theme => ({
   }
 });
 
-const LoggedinView = ({ author, classes, createdAt, message }) => (
+const LoggedinView = ({ author, id, classes, createdAt, commentId, message, user }) => {
+  return (
   <div className={classes.reply}>
     <Typography variant="subtitle2">
       {message}
@@ -25,8 +27,10 @@ const LoggedinView = ({ author, classes, createdAt, message }) => (
       <TimeAgo date={createdAt} />
       {` - ${author && author.name}`}
     </Typography>
+    <DeleteButtonContainer {...{ author, commentId: id, user }} />
   </div>
 );
+};
 
 const enhanced = compose(
   withStyles(styles)

@@ -107,6 +107,7 @@ type CommentPreviousValues {
   updatedAt: DateTime!
   isPublic: Boolean!
   message: String!
+  # parent: Comment - can't seem to get this working!
 }
 
 input CommentScalarWhereInput {
