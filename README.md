@@ -1,6 +1,6 @@
 ### List of stacked PRs
 
-this should make this a bit easier to review:
+please see stacked PRs with comments: 
 
 - [Part 1: Login](https://github.com/jneiku/makana-rpt-ui/pull/1)
 - [Part 2: Feed update](https://github.com/jneiku/makana-rpt-ui/pull/2)
@@ -11,6 +11,10 @@ this should make this a bit easier to review:
 - [Part 7: Delete button](https://github.com/jneiku/makana-rpt-ui/pull/7)
 - [Part 8: Edit comment](https://github.com/jneiku/makana-rpt-ui/pull/8)
 
+hoping this makes reviewing easier
+
 ![](https://graysonkoonce.com/content/images/2016/05/Screen-Shot-2016-05-25-at-4-01-23-PM.png)
 
 alternatively, [see latest branch](https://github.com/SalesforceFoundation/makana-rpt-ui/compare/master...jneiku:latest) to view all changes at once
+
+my best work would most definitely include Flow prop types and tests, which I'm still happy to add, but I ran out of time making a push to meet functionality requirements 
