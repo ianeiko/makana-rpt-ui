@@ -92,9 +92,11 @@ const Comment = ({
         <CommentReplyView key={`${commentId}-reply-${index}`} {...reply} />
       ))}
     </CardContent>
-    <CardActions className={classes.cardActions}>
-      <ReplyFormContainer parentCommentId={commentId} user={user} />
-    </CardActions>
+    {!isEditMode ? (
+      <CardActions className={classes.cardActions}>
+        <ReplyFormContainer parentCommentId={commentId} user={user} />
+      </CardActions>
+    ) : null}
   </Card>
 );
 
