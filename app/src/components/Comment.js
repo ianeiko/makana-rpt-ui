@@ -51,50 +51,65 @@ const onChangeEditMode = ({ isEditMode, setEditMode }) => () => {
   setEditMode(!isEditMode);
 };
 
-const Comment = ({
-  author,
-  children,
-  classes,
-  commentId,
-  createdAt,
-  isEditMode,
-  isPublic,
-  message,
-  onChangeEditMode,
-  setEditMode,
-  user,
- }) => (
-  <Card className={classes.card}>
-    <CardHeader
-      className={classes.cardHeader}
-      action={
-        <Fragment>
-          <IconButton className={classes.actionButton} onClick={onChangeEditMode} title="Edit">
-            <EditIcon />
-          </IconButton>
-          <DeleteButtonContainer {...{ author, commentId, user }} />
-        </Fragment>
-      }
-      subheader={
-        <Typography variant="caption" color="textSecondary">
-          {`Posted by ${author && author.name} `}
-          <TimeAgo date={createdAt} />
-        </Typography>
-      }
-    />
-    <CardContent className={classes.cardContent}>
-      <EditCommentContainer {...{ commentId, isPublic, isEditMode, setEditMode, message }} />
-      {children && children.map((reply, index) => (
+function renderActionButtons({ author, commentId, classes, onChangeEditMode, user }) {
+  return (
+    <Fragment>
+      <IconButton className={classes.actionButton} onClick={onChangeEditMode} title="Edit">
+        <EditIcon />
+      </IconButton>
+      <DeleteButtonContainer {...{ author, commentId, user }} />
+    </Fragment>
+  );
+}
+
+function renderSubheader({ author, createdAt }) {
+  return (
+    <Typography variant="caption" color="textSecondary">
+      {`Posted by ${author && author.name} `}
+      <TimeAgo date={createdAt} />
+    </Typography>
+  );
+}
+
+function renderReplies({ children: replies, commentId }) {
+  return (
+    <Fragment>
+      {replies && replies.map((reply, index) => (
         <CommentReplyView key={`${commentId}-reply-${index}`} {...reply} />
       ))}
-    </CardContent>
-    {!isEditMode ? (
-      <CardActions className={classes.cardActions}>
-        <ReplyFormContainer parentCommentId={commentId} user={user} />
-      </CardActions>
-    ) : null}
-  </Card>
-);
+    </Fragment>
+  );
+}
+
+const Comment = (props) => {
+  const {
+    classes,
+    commentId,
+    isEditMode,
+    isPublic,
+    message,
+    setEditMode,
+    user,
+  } = props;
+  return (
+    <Card className={classes.card}>
+      <CardHeader
+        className={classes.cardHeader}
+        action={renderActionButtons(props)}
+        subheader={renderSubheader(props)}
+      />
+      <CardContent className={classes.cardContent}>
+        <EditCommentContainer {...{ commentId, isPublic, isEditMode, setEditMode, message }} />
+        {renderReplies(props)}
+      </CardContent>
+      {!isEditMode ? (
+        <CardActions className={classes.cardActions}>
+          <ReplyFormContainer parentCommentId={commentId} user={user} />
+        </CardActions>
+      ) : null}
+    </Card>
+  );
+};
 
 const enhanced = compose(
   withState('isEditMode', 'setEditMode', false),
