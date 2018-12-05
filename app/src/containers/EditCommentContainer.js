@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { compose, withHandlers } from 'recompose';
+import { editCommentMutation } from '../queries';
 import EditCommentForm from '../components/EditCommentForm';
 
 const editCommentMutationHandler = ({ mutate }) => ({ commentId, message, isPublic }) => (
@@ -8,19 +8,6 @@ const editCommentMutationHandler = ({ mutate }) => ({ commentId, message, isPubl
     variables: { id: commentId, message, isPublic }
   })
 );
-
-const editCommentMutation = gql`
-  mutation($id: ID!, $message: String!, $isPublic: Boolean) {
-    editComment(
-      id: $id,
-      message: $message
-      isPublic: $isPublic
-    ) {
-      message
-      isPublic
-    }
-  }
-`;
 
 const enhanced = compose(
   graphql(editCommentMutation),

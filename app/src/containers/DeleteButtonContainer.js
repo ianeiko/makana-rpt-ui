@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { branch, compose, renderComponent, renderNothing, withHandlers } from 'recompose';
+import { deleteComment } from '../queries';
 import DeleteButton from '../components/DeleteButton';
 
 const checkOwner = currentUserIsOwner => branch(
@@ -14,16 +14,6 @@ const deleteCommentMutationHandler = ({ mutate }) => commentId => (
     variables: { id: commentId }
   })
 );
-
-const deleteComment = gql`
-  mutation($id: ID!) {
-    deleteComment(
-      id: $id
-    ) {
-      id
-    }
-  }
-`;
 
 const enhanced = compose(
   graphql(deleteComment),

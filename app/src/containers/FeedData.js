@@ -1,5 +1,5 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { feedQuery, feedSubscriptionQuery } from '../queries';
 import { compose, lifecycle, withProps, toRenderProps } from 'recompose';
 
 const findNodeIndex = (feed, id) => feed.findIndex(node => node.id === id);
@@ -39,75 +39,14 @@ const updateQuery = (prev, { subscriptionData: { data }}) => {
   return prev;
 };
 
-const query = gql`
-  query feed {
-    feed {
-      id
-      message
-      createdAt
-      isPublic
-      author {
-        id
-        name
-      }
-      children {
-        id
-        message
-        createdAt
-        author {
-          id
-          name
-        }
-        parent {
-          id
-        }
-      }
-    }
-  }
-`;
-
-const subscriptionQuery = gql`
-  subscription($includePrivate: Boolean) {
-    feedSubscription(includePrivate: $includePrivate) {
-      mutation
-      node {
-        id
-        message
-        createdAt
-        isPublic
-        author {
-          id
-          name
-        }
-        parent {
-          id
-        }
-        children {
-          id
-          message
-          createdAt
-          author {
-            id
-            name
-          }
-        }
-      }
-      previousValues {
-        id
-        message
-      }
-    }
-  }
-`;
-
 const subscribeToMore = (user) => ({
-  document: subscriptionQuery,
+  document: feedSubscriptionQuery,
   updateQuery,
   variables: { includePrivate: !!user },
 });
 
 const enhanced = compose(
-  graphql(query),
+  graphql(feedQuery),
   withProps(({ data: { loading, feed } }) => ({
     loading: loading,
     comments: feed
