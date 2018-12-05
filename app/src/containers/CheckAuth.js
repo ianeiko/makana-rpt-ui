@@ -1,5 +1,5 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { queryMe } from '../queries';
 import { compose, branch, renderComponent, renderNothing } from 'recompose';
 
 const checkAuth = isAuthenticated => branch(
@@ -8,17 +8,8 @@ const checkAuth = isAuthenticated => branch(
   renderNothing,
 );
 
-const query = gql`
-  query me {
-    me {
-      id
-      name
-    }
-  }
-`;
-
 const enhanced = compose(
-  graphql(query),
+  graphql(queryMe),
   checkAuth(({ data, not }) => (data && data.me && !not) || (!(data && data.me) && not))
 );
 

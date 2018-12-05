@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { compose, withHandlers } from 'recompose';
+import { logoutMutation } from '../queries';
 import LoggedinView from '../components/LoggedinView';
 
 const logoutMutationHandler = ({ mutate }) => () => (
@@ -8,12 +8,6 @@ const logoutMutationHandler = ({ mutate }) => () => (
     refetchQueries: ['me', 'feed'],
   })
 );
-
-const logoutMutation = gql`
-  mutation logout {
-    logout
-  }
-`;
 
 const enhanced = compose(
   graphql(logoutMutation),
