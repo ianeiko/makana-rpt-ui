@@ -45,7 +45,7 @@ const comment = {
       data.message = message;
     }
 
-    if (isPublic) {
+    if (isPublic !== undefined) {
       data.isPublic = isPublic;
     }
 
