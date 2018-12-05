@@ -1,18 +1,9 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { compose, withProps, toRenderProps } from 'recompose';
-
-const query = gql`
-  query me {
-    me {
-      id
-      name
-    }
-  }
-`;
+import { queryMe } from '../queries';
 
 const enhanced = compose(
-  graphql(query),
+  graphql(queryMe),
   withProps(({ data: { me }}) => me)
 );
 

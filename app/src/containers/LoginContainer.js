@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 import { branch, compose, renderComponent, withHandlers } from 'recompose';
+import { loginMutation } from '../queries';
 import LoginForm from '../components/LoginForm';
 import LogoutContainer from './LogoutContainer';
 
@@ -22,16 +22,6 @@ const loginMutationHandler = ({ mutate }) => ({ email, password }) => (
     return { errors: error.graphQLErrors.map(error => error.message) };
   })
 );
-
-const loginMutation = gql`
-  mutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      user {
-        name
-      }
-    }
-  }
-`;
 
 const enhanced = compose(
   graphql(loginMutation),
