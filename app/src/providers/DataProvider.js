@@ -18,7 +18,8 @@ const wsLink = new WebSocketLink({
   }
 });
 const httpLink = new HttpLink({
-  uri: HTTP_URL
+  uri: HTTP_URL,
+  credentials: 'include',
 });
 
 const link = split(

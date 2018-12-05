@@ -28,13 +28,12 @@ const auth = {
       throw new Error('Invalid password');
     }
 
-    return {
-      token: jwt.sign(
-        { userId: user.id, name: user.name },
-        process.env.APP_SECRET
-      ),
-      user
-    };
+    const token = jwt.sign({ userId: user.id, name: user.name }, process.env.APP_SECRET);
+    const DAYS_7 = 1000 * 60 * 60 * 24 * 7;
+    const cookieOptions = { httpOnly: true, maxAge: DAYS_7 };
+    ctx.response.cookie('token', token, cookieOptions);
+
+    return { user, token };
   }
 };
 
