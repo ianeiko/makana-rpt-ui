@@ -9,7 +9,8 @@ import Typography from '@material-ui/core/Typography';
 const styles = theme => ({
   card: {
     margin: theme.spacing.unit * 2,
-    maxWidth: 400
+    maxWidth: 400,
+    width: '80%'
   }
 });
 

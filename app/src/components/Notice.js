@@ -14,12 +14,13 @@ export default compose(
   withSnackbar,
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (this.props === nextProps) {
+      if (this.props === nextProps || !nextProps.message) {
         return;
       }
 
       this.props.enqueueSnackbar(nextProps.message, {
-        variant: messageType(nextProps.mutation)
+        variant: messageType(nextProps.mutation),
+        autoHideDuration: nextProps.autoHideDuration || 1500,
       });
     }
   }),
