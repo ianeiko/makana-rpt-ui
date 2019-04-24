@@ -5,8 +5,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import CommentReplyView from './CommentReplyView';
+import DeleteButtonContainer from '../containers/DeleteButtonContainer';
 import ReplyFormContainer from '../containers/ReplyFormContainer';
 
 const styles = theme => ({
@@ -23,17 +25,35 @@ const styles = theme => ({
     backgroundColor: theme.palette.grey[100],
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
+  },
+  cardContent: {
+    paddingTop: 0,
+  },
+  cardHeader: {
+    minHeight: 48,
+    margin: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
   }
 });
 
 const enhanced = compose(withStyles(styles));
 
-export default enhanced(({ children, classes, message, createdAt, user, commentId }) => (
+export default enhanced(({ author, children, classes, message, createdAt, user, commentId }) => (
   <Card className={classes.card}>
-    <CardContent>
-      <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-        <TimeAgo date={createdAt} />
-      </Typography>
+    <CardHeader
+      className={classes.cardHeader}
+      action={
+        <DeleteButtonContainer author={author} commentId={commentId} user={user} />
+      }
+      subheader={
+        <Typography variant="caption" color="textSecondary">
+          {`Posted by ${author && author.name} `}
+          <TimeAgo date={createdAt} />
+        </Typography>
+      }
+    />
+    <CardContent className={classes.cardContent}>
       <Typography variant="h5" component="h2">
         {message}
       </Typography>
