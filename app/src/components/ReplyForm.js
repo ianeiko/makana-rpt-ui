@@ -13,20 +13,14 @@ const styles = theme => ({
     float: 'right',
     marginTop: theme.spacing.unit
   },
-  form: {
-    maxWidth: 400,
-    width: '80%',
-    marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2,
-  }
 });
 
-const handleSubmit = ({ commentMutation, message, isPublic, setErrors, setMessage }) => async event => {
+const handleSubmit = ({ commentMutation, message, isPublic, setErrors, setMessage, parentCommentId }) => async event => {
   event.preventDefault();
   const errors = validateMessage({ message });
   setErrors(errors);
   if (errors) { return; }
-  commentMutation({ message, isPublic })
+  commentMutation({ message, isPublic, parentCommentId })
     .then(() => {
       setMessage('');
     });
@@ -49,7 +43,7 @@ const onChangeIsPublic = ({ setIsPublic }) => (event, checked) => {
   setIsPublic(checked);
 };
 
-const CommentForm = ({
+const ReplyComment = ({
   classes,
   errors,
   handleSubmit,
@@ -59,11 +53,11 @@ const CommentForm = ({
   onChangeMessage,
   onKeyPress,
 }) => (
-  <form className={classes.form} onSubmit={handleSubmit}>
+  <form onSubmit={handleSubmit}>
     <FormControl
       errors={errors}
       field="message"
-      label="How will you make our world a better place?"
+      label="Reply to post"
       onChange={onChangeMessage}
       value={message}
       textFieldOptions={{
@@ -80,7 +74,7 @@ const CommentForm = ({
           color="primary"
         />
       }
-      label={isPublic ? 'Share with everyone?' : 'Only registered users'}
+      label={isPublic ? 'Public reply' : 'Registered members only'}
     />
     <Button
       className={classes.button}
@@ -88,7 +82,7 @@ const CommentForm = ({
       disabled={!!errors}
       variant="contained"
       type="submit">
-      Post
+      Reply
     </Button>
   </form>
 );
@@ -107,4 +101,4 @@ const enhanced = compose(
   }),
   withStyles(styles)
 );
-export default enhanced(CommentForm);
+export default enhanced(ReplyComment);

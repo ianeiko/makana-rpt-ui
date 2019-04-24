@@ -2,6 +2,8 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { compose, lifecycle, withProps, toRenderProps } from 'recompose';
 
+const findNodeIndex = (feed, id) => feed.findIndex(node => node.id === id);
+
 const updateQuery = (prev, { subscriptionData: { data }}) => {
   if (!data) {
     return prev;
@@ -9,6 +11,13 @@ const updateQuery = (prev, { subscriptionData: { data }}) => {
 
   const { node, mutation } = data.feedSubscription;
   if (mutation === 'CREATED') {
+    if (node.parent && node.parent.id) {
+      const resultFeed = prev.feed;
+      const repliedNodeIndex = findNodeIndex(prev.feed, node.parent.id);
+      const repliedNode = resultFeed[repliedNodeIndex];
+      repliedNode.children = [...repliedNode.children, node];
+      return { feed: resultFeed };
+    }
     return {
       feed: [node, ...prev.feed]
     };
@@ -23,6 +32,14 @@ const query = gql`
       id
       message
       createdAt
+      children {
+        id
+        message
+        createdAt
+        parent {
+          id
+        }
+      }
     }
   }
 `;
@@ -35,6 +52,14 @@ const subscriptionQuery = gql`
         id
         message
         createdAt
+        parent {
+          id
+        }
+        children {
+          id
+          message
+          createdAt
+        }
       }
       previousValues {
         id

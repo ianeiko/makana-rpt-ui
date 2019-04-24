@@ -3,10 +3,12 @@ import Comment from './Comment';
 import { compose } from 'recompose';
 import renderWhileLoading from '../utils/renderWhileLoading';
 
-const ListComments = ({ comments }) => (
+const ListComments = ({ comments, user }) => (
   <Fragment>
     {comments &&
-      comments.map(({ id, ...comment }) => <Comment key={id} {...comment} />)}
+      comments.map(({ id, ...comment }) => (
+        <Comment user={user} commentId={id} key={id} {...comment} />
+      ))}
   </Fragment>
 );
 
