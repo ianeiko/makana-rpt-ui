@@ -1,0 +1,10 @@
+import isEmpty from 'validator/lib/isEmpty';
+
+const validateMessage = ({ message }) => {
+  if (isEmpty(message)) {
+    return [{ message: 'Message cannot be blank', field: 'message' }];
+  }
+  return null;
+};
+
+export default validateMessage;
