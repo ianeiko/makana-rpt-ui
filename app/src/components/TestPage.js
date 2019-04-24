@@ -3,10 +3,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { compose } from 'recompose';
 import FeedData from '../containers/FeedData';
 import FeedSubscriptionData from '../containers/FeedSubscriptionData';
+import CheckAuth from '../containers/CheckAuth';
 import ListComments from './ListComments';
 import GetUser from '../containers/GetUser';
 import LoginContainer from '../containers/LoginContainer';
 import Notice from './Notice';
+import CommentFormContainer from '../containers/CommentFormContainer';
 
 const styles = theme => ({
   page: {
@@ -24,10 +26,12 @@ export default enhanced(({ classes }) => (
     <GetUser>
       {props => <LoginContainer {...props} />}
     </GetUser>
+    <CheckAuth>
+      <CommentFormContainer />
+    </CheckAuth>
     <FeedSubscriptionData>
       {props => <Notice {...props} />}
     </FeedSubscriptionData>
-
     <FeedData>{props => <ListComments {...props} />}</FeedData>
   </div>
 ));
